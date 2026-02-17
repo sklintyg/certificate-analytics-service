@@ -11,7 +11,7 @@ ARG X_UID=1001
 ENV X_UID=${X_UID}
 
 # Add custom S2I scripts
-ADD s2i/bin/ /usr/libexec/s2i/
+ADD s2i/bin /usr/libexec/s2i/
 RUN chmod 777 -R /usr/libexec/s2i/
 
 # S2I runs as user default, but when invoked by the testrunner pod another user (uid) is active (depends on openshift project settings)
