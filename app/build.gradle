@@ -1,5 +1,10 @@
 plugins {
+    alias(libs.plugins.org.cyclonedx.bom)
     alias(libs.plugins.org.springframework.boot)
+}
+
+tasks.named('bootJar') {
+    archiveFileName.set('app.jar')
 }
 
 def applicationDir = "${rootProject.projectDir}/devops/dev"
