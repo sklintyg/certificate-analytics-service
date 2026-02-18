@@ -17,7 +17,6 @@ ext {
 springBoot {
     mainClass = 'se.inera.intyg.certificateanalyticsservice.CertificateAnalyticsServiceApplication'
 }
-
 group = 'se.inera.intyg.certificateanalyticsservice'
 version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
 
@@ -31,37 +30,19 @@ allprojects {
     }
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "intyg-certificate-analytics-service"
-        property "sonar.projectName", "intyg-certificate-analytics-service"
-        property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.json" as String
-        property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.html" as String
-        property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
-    }
-}
-
-dependencyCheck {
-    formats = ['HTML', 'JSON']
-    nvd.setDatafeedUrl(nvdMirror)
-    analyzers.setAssemblyEnabled(false)
-    analyzers.setNodeEnabled(false)
-    analyzers.setCentralEnabled(false)
-    analyzers.ossIndex.setUsername(project.properties.get('ossIndexUsername') as String)
-    analyzers.ossIndex.setPassword(project.properties.get('ossIndexPassword') as String)
-}
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'java-test-fixtures'
 
     java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
     }
 
     configurations {
+        mockitoAgent
         compileOnly {
             extendsFrom annotationProcessor
         }
@@ -73,6 +54,8 @@ subprojects {
         testImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testAnnotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testFixturesImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        mockitoAgent platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        mockitoAgent("org.mockito:mockito-core") { transitive = false }
     }
 
     jacocoTestReport {
@@ -97,8 +80,11 @@ subprojects {
         t.includeConfigs = ['^runtimeClasspath$']
     }
 
-    tasks.withType(Test).configureEach {
-        jvmArgs '-Xshare:off'
+    test {
+        jvmArgs += [
+                "-javaagent:${configurations.mockitoAgent.asPath}",
+                "-Xshare:off"
+        ]
     }
 }
 
@@ -112,8 +98,12 @@ reporting {
     subprojects.collect { subproject -> subproject.name }.each { subprojectName ->
         dependencies { testReportAggregation project(":${subprojectName}") }
     }
+}
 
-    dependencies {
-        testReportAggregation project(':app')
+sonar {
+    properties {
+        property "sonar.projectKey", "intyg-certificate-analytics-service"
+        property "sonar.projectName", "intyg-certificate-analytics-service"
+        property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
     }
 }
