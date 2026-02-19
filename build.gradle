@@ -1,69 +1,50 @@
 plugins {
-    alias(libs.plugins.org.springframework.boot)
-    alias(libs.plugins.org.sonarqube)
-    alias(libs.plugins.org.owasp.dependencycheck)
     alias(libs.plugins.com.github.ben.manes.versions)
-    id 'test-report-aggregation'
-    id 'application'
+    alias(libs.plugins.org.cyclonedx.bom)
+    alias(libs.plugins.org.sonarqube)
+    alias(libs.plugins.org.springframework.boot)
 }
 
-ext {
-    intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
-    ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
-    nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
-}
+apply from: 'gradle/configureIntygBom.gradle'
 
 springBoot {
     mainClass = 'se.inera.intyg.certificateanalyticsservice.CertificateAnalyticsServiceApplication'
 }
 
-group = 'se.inera.intyg.certificateanalyticsservice'
-version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
-
-apply from: 'gradle/configureIntygBom.gradle'
-
 allprojects {
+    apply plugin: 'java'
+    apply plugin: 'test-report-aggregation'
+
+    group = 'se.inera.intyg.certificateanalyticsservice'
+    version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
+
     repositories {
         mavenLocal()
-        maven { url = ineraMavenRepository }
+        maven { url "https://nexus.drift.inera.se/repository/it-public/" }
         mavenCentral()
     }
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "intyg-certificate-analytics-service"
-        property "sonar.projectName", "intyg-certificate-analytics-service"
-        property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.json" as String
-        property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.html" as String
-        property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
-    }
-}
-
-dependencyCheck {
-    formats = ['HTML', 'JSON']
-    nvd.setDatafeedUrl(nvdMirror)
-    analyzers.setAssemblyEnabled(false)
-    analyzers.setNodeEnabled(false)
-    analyzers.setCentralEnabled(false)
-    analyzers.ossIndex.setUsername(project.properties.get('ossIndexUsername') as String)
-    analyzers.ossIndex.setPassword(project.properties.get('ossIndexPassword') as String)
-}
-
 subprojects {
-    apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'java-test-fixtures'
 
     java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
     }
 
     configurations {
+        mockitoAgent
         compileOnly {
             extendsFrom annotationProcessor
         }
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+        options.compilerArgs.add("-parameters")
     }
 
     dependencies {
@@ -72,6 +53,23 @@ subprojects {
         testImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testAnnotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testFixturesImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        mockitoAgent platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        mockitoAgent("org.mockito:mockito-core") { transitive = false }
+    }
+
+    test {
+        jvmArgs += [
+                "-javaagent:${configurations.mockitoAgent.asPath}",
+                "-Xshare:off"
+        ]
+    }
+
+    testing {
+        suites {
+            test {
+                useJUnitJupiter()
+            }
+        }
     }
 
     jacocoTestReport {
@@ -92,8 +90,8 @@ subprojects {
         }
     }
 
-    tasks.withType(Test).configureEach {
-        jvmArgs '-Xshare:off'
+    tasks.matching { it.name == "cyclonedxDirectBom" }.configureEach { t ->
+        t.includeConfigs = ['^runtimeClasspath$']
     }
 }
 
@@ -104,7 +102,15 @@ reporting {
         }
     }
 
-    dependencies {
-        testReportAggregation project(':app')
+    subprojects.collect { subproject -> subproject.name }.each { subprojectName ->
+        dependencies { testReportAggregation project(":${subprojectName}") }
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "intyg-certificate-analytics-service"
+        property "sonar.projectName", "intyg-certificate-analytics-service"
+        property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
     }
 }

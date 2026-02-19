@@ -1,5 +1,10 @@
 plugins {
+    alias(libs.plugins.org.cyclonedx.bom)
     alias(libs.plugins.org.springframework.boot)
+}
+
+tasks.named('bootJar') {
+    archiveFileName.set('app.jar')
 }
 
 def applicationDir = "${rootProject.projectDir}/devops/dev"
@@ -26,10 +31,8 @@ dependencies {
 
     testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
     testFixturesImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-}
 
-testing.suites {
-    test { useJUnitJupiter() }
+    testFixturesApi 'jakarta.persistence:jakarta.persistence-api'
 }
 
 bootRun {
