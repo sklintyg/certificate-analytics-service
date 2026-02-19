@@ -1,37 +1,31 @@
 plugins {
-    alias(libs.plugins.org.cyclonedx.bom)
-    alias(libs.plugins.org.springframework.boot)
-    alias(libs.plugins.org.sonarqube)
-    alias(libs.plugins.org.owasp.dependencycheck)
     alias(libs.plugins.com.github.ben.manes.versions)
-    id 'test-report-aggregation'
-    id 'application'
+    alias(libs.plugins.org.cyclonedx.bom)
+    alias(libs.plugins.org.sonarqube)
+    alias(libs.plugins.org.springframework.boot)
 }
 
-ext {
-    intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
-    ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
-    nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
-}
+apply from: 'gradle/configureIntygBom.gradle'
 
 springBoot {
     mainClass = 'se.inera.intyg.certificateanalyticsservice.CertificateAnalyticsServiceApplication'
 }
-group = 'se.inera.intyg.certificateanalyticsservice'
-version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
-
-apply from: 'gradle/configureIntygBom.gradle'
 
 allprojects {
+    apply plugin: 'java'
+    apply plugin: 'test-report-aggregation'
+
+    group = 'se.inera.intyg.certificateanalyticsservice'
+    version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
+
     repositories {
         mavenLocal()
-        maven { url = ineraMavenRepository }
+        maven { url "https://nexus.drift.inera.se/repository/it-public/" }
         mavenCentral()
     }
 }
 
 subprojects {
-    apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'java-test-fixtures'
 
@@ -48,6 +42,11 @@ subprojects {
         }
     }
 
+    compileJava {
+        options.encoding = "UTF-8"
+        options.compilerArgs.add("-parameters")
+    }
+
     dependencies {
         implementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         annotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
@@ -56,6 +55,21 @@ subprojects {
         testFixturesImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         mockitoAgent platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         mockitoAgent("org.mockito:mockito-core") { transitive = false }
+    }
+
+    test {
+        jvmArgs += [
+                "-javaagent:${configurations.mockitoAgent.asPath}",
+                "-Xshare:off"
+        ]
+    }
+
+    testing {
+        suites {
+            test {
+                useJUnitJupiter()
+            }
+        }
     }
 
     jacocoTestReport {
@@ -78,13 +92,6 @@ subprojects {
 
     tasks.matching { it.name == "cyclonedxDirectBom" }.configureEach { t ->
         t.includeConfigs = ['^runtimeClasspath$']
-    }
-
-    test {
-        jvmArgs += [
-                "-javaagent:${configurations.mockitoAgent.asPath}",
-                "-Xshare:off"
-        ]
     }
 }
 
