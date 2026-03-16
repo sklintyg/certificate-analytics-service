@@ -1,0 +1,20 @@
+app:
+  jms:
+    queue-name: test.certificate.analytics.message.queue
+  pseudonymization:
+    context: dev
+    key: thisisafakekeyforlocaldev
+
+database:
+  name: certificate_analytics_service
+
+logging:
+  structured:
+    format:
+      console: ""
+
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+    url: "jdbc:tc:mysql:8.0.34://dbserver:9999/${database.name}?useSSL=false&serverTimezone=Europe/Stockholm&allowPublicKeyRetrieval=true"

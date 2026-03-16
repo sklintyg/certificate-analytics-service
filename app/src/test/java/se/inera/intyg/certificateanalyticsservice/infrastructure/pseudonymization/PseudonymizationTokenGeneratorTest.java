@@ -3,28 +3,25 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymizati
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.certificateanalyticsservice.config.properties.AppProperties;
+import se.inera.intyg.certificateanalyticsservice.config.properties.AppProperties.Jms;
+import se.inera.intyg.certificateanalyticsservice.config.properties.AppProperties.Pseudonymization;
 
-@ExtendWith(SpringExtension.class)
 class PseudonymizationTokenGeneratorTest {
 
-  @InjectMocks
   private PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "key",
-        "thisisasecretkeythatisusedaspepper".getBytes(StandardCharsets.UTF_8)
+    final var appProperties = new AppProperties(
+        new Pseudonymization("thisisasecretkeythatisusedaspepper", "analytics-test"),
+        new Jms("test.queue")
     );
-    ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-test");
+    pseudonymizationTokenGenerator = new PseudonymizationTokenGenerator(appProperties);
   }
 
   /**
@@ -450,13 +447,24 @@ class PseudonymizationTokenGeneratorTest {
   @Nested
   class TestUniquenessBetweenDifferentContexts {
 
+    private PseudonymizationTokenGenerator pseudonymizationTokenGeneratorDevContext;
+
+    @BeforeEach
+    void setUpDevContext() {
+      pseudonymizationTokenGeneratorDevContext = new PseudonymizationTokenGenerator(
+          new AppProperties(
+              new Pseudonymization("thisisasecretkeythatisusedaspepper", "analytics-dev"),
+              new Jms("test.queue")
+          )
+      );
+    }
+
     @Test
     void shallGenerateDifferentPseudonymizedIdFromSameValueButDifferentContext() {
       final var id = "id";
 
       final var idOne = pseudonymizationTokenGenerator.id(id);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var idTwo = pseudonymizationTokenGenerator.id(id);
+      final var idTwo = pseudonymizationTokenGeneratorDevContext.id(id);
 
       assertNotEquals(idOne, idTwo);
     }
@@ -466,8 +474,7 @@ class PseudonymizationTokenGeneratorTest {
       final var eventUnitId = "eventUnitId";
 
       final var eventUnitIdOne = pseudonymizationTokenGenerator.eventUnitId(eventUnitId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var eventUnitIdTwo = pseudonymizationTokenGenerator.eventUnitId(eventUnitId);
+      final var eventUnitIdTwo = pseudonymizationTokenGeneratorDevContext.eventUnitId(eventUnitId);
 
       assertNotEquals(eventUnitIdOne, eventUnitIdTwo);
     }
@@ -478,8 +485,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var eventCareProviderIdOne = pseudonymizationTokenGenerator.eventCareProviderId(
           eventCareProviderId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var eventCareProviderIdTwo = pseudonymizationTokenGenerator.eventCareProviderId(
+      final var eventCareProviderIdTwo = pseudonymizationTokenGeneratorDevContext.eventCareProviderId(
           eventCareProviderId);
 
       assertNotEquals(eventCareProviderIdOne, eventCareProviderIdTwo);
@@ -490,8 +496,7 @@ class PseudonymizationTokenGeneratorTest {
       final var staffId = "staffId";
 
       final var staffIdOne = pseudonymizationTokenGenerator.staffId(staffId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var staffIdTwo = pseudonymizationTokenGenerator.staffId(staffId);
+      final var staffIdTwo = pseudonymizationTokenGeneratorDevContext.staffId(staffId);
 
       assertNotEquals(staffIdOne, staffIdTwo);
     }
@@ -501,8 +506,7 @@ class PseudonymizationTokenGeneratorTest {
       final var certificateId = "certificateId";
 
       final var certificateIdOne = pseudonymizationTokenGenerator.certificateId(certificateId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var certificateIdTwo = pseudonymizationTokenGenerator.certificateId(certificateId);
+      final var certificateIdTwo = pseudonymizationTokenGeneratorDevContext.certificateId(certificateId);
 
       assertNotEquals(certificateIdOne, certificateIdTwo);
     }
@@ -513,8 +517,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var parentCertificateIdOne = pseudonymizationTokenGenerator.parentCertificateId(
           parentCertificateId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var parentCertificateIdTwo = pseudonymizationTokenGenerator.parentCertificateId(
+      final var parentCertificateIdTwo = pseudonymizationTokenGeneratorDevContext.parentCertificateId(
           parentCertificateId);
 
       assertNotEquals(parentCertificateIdOne, parentCertificateIdTwo);
@@ -526,8 +529,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var certificateUnitIdOne = pseudonymizationTokenGenerator.certificateUnitId(
           certificateUnitId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var certificateUnitIdTwo = pseudonymizationTokenGenerator.certificateUnitId(
+      final var certificateUnitIdTwo = pseudonymizationTokenGeneratorDevContext.certificateUnitId(
           certificateUnitId);
 
       assertNotEquals(certificateUnitIdOne, certificateUnitIdTwo);
@@ -539,8 +541,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var certificateCareProviderIdOne = pseudonymizationTokenGenerator.certificateCareProviderId(
           certificateCareProviderId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var certificateCareProviderIdTwo = pseudonymizationTokenGenerator.certificateCareProviderId(
+      final var certificateCareProviderIdTwo = pseudonymizationTokenGeneratorDevContext.certificateCareProviderId(
           certificateCareProviderId);
 
       assertNotEquals(certificateCareProviderIdOne, certificateCareProviderIdTwo);
@@ -551,8 +552,7 @@ class PseudonymizationTokenGeneratorTest {
       final var sessionId = "sessionId";
 
       final var sessionIdOne = pseudonymizationTokenGenerator.sessionId(sessionId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var sessionIdTwo = pseudonymizationTokenGenerator.sessionId(sessionId);
+      final var sessionIdTwo = pseudonymizationTokenGeneratorDevContext.sessionId(sessionId);
 
       assertNotEquals(sessionIdOne, sessionIdTwo);
     }
@@ -562,8 +562,7 @@ class PseudonymizationTokenGeneratorTest {
       final var patientId = "patientId";
 
       final var patientIdOne = pseudonymizationTokenGenerator.patientId(patientId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var patientIdTwo = pseudonymizationTokenGenerator.patientId(patientId);
+      final var patientIdTwo = pseudonymizationTokenGeneratorDevContext.patientId(patientId);
 
       assertNotEquals(patientIdOne, patientIdTwo);
     }
@@ -573,8 +572,7 @@ class PseudonymizationTokenGeneratorTest {
       final var messageId = "messageId";
 
       final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+      final var messageIdTwo = pseudonymizationTokenGeneratorDevContext.messageId(messageId);
 
       assertNotEquals(messageIdOne, messageIdTwo);
     }
@@ -585,8 +583,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var messageAnswerIdOne = pseudonymizationTokenGenerator.messageAnswerId(
           messageAnswerId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageAnswerIdTwo = pseudonymizationTokenGenerator.messageAnswerId(
+      final var messageAnswerIdTwo = pseudonymizationTokenGeneratorDevContext.messageAnswerId(
           messageAnswerId);
 
       assertNotEquals(messageAnswerIdOne, messageAnswerIdTwo);
@@ -598,8 +595,7 @@ class PseudonymizationTokenGeneratorTest {
 
       final var messageReminderIdOne = pseudonymizationTokenGenerator.messageReminderId(
           messageReminderId);
-      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageReminderIdTwo = pseudonymizationTokenGenerator.messageReminderId(
+      final var messageReminderIdTwo = pseudonymizationTokenGeneratorDevContext.messageReminderId(
           messageReminderId);
 
       assertNotEquals(messageReminderIdOne, messageReminderIdTwo);

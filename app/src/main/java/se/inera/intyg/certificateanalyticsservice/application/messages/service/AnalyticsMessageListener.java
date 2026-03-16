@@ -19,7 +19,7 @@ public class AnalyticsMessageListener {
   private final AnalyticsMessageService analyticsMessageService;
 
   @Transactional
-  @JmsListener(destination = "${certificate.analytics.message.queue.name}")
+  @JmsListener(destination = "${app.jms.queue-name}")
   public void onMessage(
       @Payload String body,
       @Header(name = "_type") String type,

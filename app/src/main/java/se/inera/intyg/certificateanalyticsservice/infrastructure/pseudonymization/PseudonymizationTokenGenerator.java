@@ -5,17 +5,19 @@ import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateanalyticsservice.config.properties.AppProperties;
 
 @Component
 public class PseudonymizationTokenGenerator {
 
-  @Value("${pseudonymization.key}")
-  private byte[] key;
+  private final byte[] key;
+  private final String context;
 
-  @Value("${pseudonymization.context}")
-  private String context;
+  public PseudonymizationTokenGenerator(AppProperties appProperties) {
+    this.key = appProperties.pseudonymization().key().getBytes(StandardCharsets.UTF_8);
+    this.context = appProperties.pseudonymization().context();
+  }
 
   private static final String FIELD_ID = "id";
   private static final String FIELD_STAFF_ID = "staffId";
