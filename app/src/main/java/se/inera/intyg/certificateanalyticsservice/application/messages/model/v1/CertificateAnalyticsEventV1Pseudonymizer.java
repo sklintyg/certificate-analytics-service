@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
 import java.time.LocalDate;
@@ -69,15 +87,15 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
   }
 
   private String eventUnitId(CertificateAnalyticsEventV1 event) {
-    return isPrivatePractitioner(event.getUnitId()) ?
-        pseudonymizationTokenGenerator.eventUnitId(event.getUnitId()) :
-        event.getUnitId();
+    return isPrivatePractitioner(event.getUnitId())
+        ? pseudonymizationTokenGenerator.eventUnitId(event.getUnitId())
+        : event.getUnitId();
   }
 
   private String eventCareProviderId(CertificateAnalyticsEventV1 event) {
-    return isPrivatePractitioner(event.getCareProviderId()) ?
-        pseudonymizationTokenGenerator.eventCareProviderId(event.getCareProviderId()) :
-        event.getCareProviderId();
+    return isPrivatePractitioner(event.getCareProviderId())
+        ? pseudonymizationTokenGenerator.eventCareProviderId(event.getCareProviderId())
+        : event.getCareProviderId();
   }
 
   private String eventSessionId(CertificateAnalyticsEventV1 event) {
@@ -93,77 +111,71 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
   }
 
   private String certificateUnitId(CertificateAnalyticsEventCertificateV1 certificate) {
-    return isPrivatePractitioner(certificate.getUnitId()) ?
-        pseudonymizationTokenGenerator.certificateUnitId(certificate.getUnitId()) :
-        certificate.getUnitId();
+    return isPrivatePractitioner(certificate.getUnitId())
+        ? pseudonymizationTokenGenerator.certificateUnitId(certificate.getUnitId())
+        : certificate.getUnitId();
   }
 
   private String certificateCareProviderId(CertificateAnalyticsEventCertificateV1 certificate) {
-    return isPrivatePractitioner(certificate.getCareProviderId()) ?
-        pseudonymizationTokenGenerator.certificateCareProviderId(certificate.getCareProviderId()) :
-        certificate.getCareProviderId();
+    return isPrivatePractitioner(certificate.getCareProviderId())
+        ? pseudonymizationTokenGenerator.certificateCareProviderId(certificate.getCareProviderId())
+        : certificate.getCareProviderId();
   }
 
-  private String certificateRelationParentId(
-      CertificateAnalyticsEventCertificateV1 certificate) {
-    return missingParent(certificate) ? null :
-        pseudonymizationTokenGenerator.parentCertificateId(certificate.getParent().getId());
+  private String certificateRelationParentId(CertificateAnalyticsEventCertificateV1 certificate) {
+    return missingParent(certificate)
+        ? null
+        : pseudonymizationTokenGenerator.parentCertificateId(certificate.getParent().getId());
   }
 
-  private String certificateRelationParentType(
-      CertificateAnalyticsEventCertificateV1 certificate) {
-    return missingParent(certificate) ? null :
-        certificate.getParent().getType();
+  private String certificateRelationParentType(CertificateAnalyticsEventCertificateV1 certificate) {
+    return missingParent(certificate) ? null : certificate.getParent().getType();
   }
 
   private String recipientId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingRecipient(messageV1) ? null :
-        messageV1.getRecipient().getId();
+    return missingRecipient(messageV1) ? null : messageV1.getRecipient().getId();
   }
 
   private String messageId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        pseudonymizationTokenGenerator.messageId(messageV1.getMessage().getId());
+    return missingMessage(messageV1)
+        ? null
+        : pseudonymizationTokenGenerator.messageId(messageV1.getMessage().getId());
   }
 
   private String messageAnswerId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        pseudonymizationTokenGenerator.messageAnswerId(messageV1.getMessage().getAnswerId());
+    return missingMessage(messageV1)
+        ? null
+        : pseudonymizationTokenGenerator.messageAnswerId(messageV1.getMessage().getAnswerId());
   }
 
   private String messageReminderId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        pseudonymizationTokenGenerator.messageReminderId(messageV1.getMessage().getReminderId());
+    return missingMessage(messageV1)
+        ? null
+        : pseudonymizationTokenGenerator.messageReminderId(messageV1.getMessage().getReminderId());
   }
 
   private String messageType(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getType();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getType();
   }
 
   private LocalDateTime messageSent(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getSent();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getSent();
   }
 
   private LocalDate messageLastDateToAnswer(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getLastDateToAnswer();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getLastDateToAnswer();
   }
 
   private List<String> messageQuestionIds(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getQuestionIds();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getQuestionIds();
   }
 
   private String messageSenderId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getSender();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getSender();
   }
 
   private String messageRecipientId(CertificateAnalyticsMessageV1 messageV1) {
-    return missingMessage(messageV1) ? null :
-        messageV1.getMessage().getRecipient();
+    return missingMessage(messageV1) ? null : messageV1.getMessage().getRecipient();
   }
 
   private boolean isPrivatePractitioner(String hsaId) {
