@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.application.messages.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,21 +39,19 @@ import org.slf4j.MDC;
 @ExtendWith(MockitoExtension.class)
 class AnalyticsMessageListenerTest {
 
-  @Mock
-  private AnalyticsMessageService analyticsMessageService;
-  @InjectMocks
-  private AnalyticsMessageListener analyticsMessageListener;
+  @Mock private AnalyticsMessageService analyticsMessageService;
+  @InjectMocks private AnalyticsMessageListener analyticsMessageListener;
 
   @Test
   void shallDelegateToServiceToProcessMessage() {
     final var message = draftMessageBuilder().build();
     final var messageAsJson = toJson(message);
 
-    analyticsMessageListener.onMessage(messageAsJson, message.getType(), message.getSchemaVersion(),
-        null, null, null);
+    analyticsMessageListener.onMessage(
+        messageAsJson, message.getType(), message.getSchemaVersion(), null, null, null);
 
-    verify(analyticsMessageService).process(messageAsJson, message.getType(),
-        message.getSchemaVersion());
+    verify(analyticsMessageService)
+        .process(messageAsJson, message.getType(), message.getSchemaVersion());
   }
 
   @Test
@@ -45,12 +61,15 @@ class AnalyticsMessageListenerTest {
     final var type = message.getType();
     final var schemaVersion = message.getSchemaVersion();
 
-    doThrow(RuntimeException.class).when(analyticsMessageService)
+    doThrow(RuntimeException.class)
+        .when(analyticsMessageService)
         .process(messageAsJson, type, schemaVersion);
 
-    assertThrows(RuntimeException.class, () ->
-        analyticsMessageListener.onMessage(messageAsJson, type, schemaVersion, null, null, null)
-    );
+    assertThrows(
+        RuntimeException.class,
+        () ->
+            analyticsMessageListener.onMessage(
+                messageAsJson, type, schemaVersion, null, null, null));
   }
 
   @Test
@@ -60,8 +79,8 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
 
     try (MockedStatic<MDC> mocked = mockStatic(MDC.class)) {
-      analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-          message.getSchemaVersion(), null, null, null);
+      analyticsMessageListener.onMessage(
+          messageAsJson, message.getType(), message.getSchemaVersion(), null, null, null);
       mocked.verify(() -> MDC.put("session.id", expected));
     }
   }
@@ -73,8 +92,8 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
 
     try (MockedStatic<MDC> mocked = mockStatic(MDC.class)) {
-      analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-          message.getSchemaVersion(), expected, null, null);
+      analyticsMessageListener.onMessage(
+          messageAsJson, message.getType(), message.getSchemaVersion(), expected, null, null);
       mocked.verify(() -> MDC.put("session.id", expected));
     }
   }
@@ -85,8 +104,8 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
 
     try (MockedStatic<MDC> mocked = mockStatic(MDC.class)) {
-      analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-          message.getSchemaVersion(), null, null, null);
+      analyticsMessageListener.onMessage(
+          messageAsJson, message.getType(), message.getSchemaVersion(), null, null, null);
       mocked.verify(() -> MDC.put(eq("trace.id"), anyString()));
     }
   }
@@ -98,8 +117,8 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
 
     try (MockedStatic<MDC> mocked = mockStatic(MDC.class)) {
-      analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-          message.getSchemaVersion(), null, expected, null);
+      analyticsMessageListener.onMessage(
+          messageAsJson, message.getType(), message.getSchemaVersion(), null, expected, null);
       mocked.verify(() -> MDC.put("trace.id", expected));
     }
   }
@@ -110,8 +129,8 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
 
     try (MockedStatic<MDC> mocked = mockStatic(MDC.class)) {
-      analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-          message.getSchemaVersion(), null, null, null);
+      analyticsMessageListener.onMessage(
+          messageAsJson, message.getType(), message.getSchemaVersion(), null, null, null);
       mocked.verify(() -> MDC.put(eq("span.id"), anyString()));
     }
   }
@@ -121,8 +140,8 @@ class AnalyticsMessageListenerTest {
     final var message = draftMessageBuilder().build();
     final var messageAsJson = toJson(message);
 
-    analyticsMessageListener.onMessage(messageAsJson, message.getType(),
-        message.getSchemaVersion(), null, null, null);
+    analyticsMessageListener.onMessage(
+        messageAsJson, message.getType(), message.getSchemaVersion(), null, null, null);
 
     assertEquals(0, MDC.getCopyOfContextMap() == null ? 0 : MDC.getCopyOfContextMap().size());
   }
@@ -133,13 +152,16 @@ class AnalyticsMessageListenerTest {
     final var messageAsJson = toJson(message);
     final var type = message.getType();
     final var schemaVersion = message.getSchemaVersion();
-    
-    doThrow(RuntimeException.class).when(analyticsMessageService)
+
+    doThrow(RuntimeException.class)
+        .when(analyticsMessageService)
         .process(messageAsJson, type, schemaVersion);
 
-    assertThrows(RuntimeException.class, () ->
-        analyticsMessageListener.onMessage(messageAsJson, type, schemaVersion, null, null, null)
-    );
+    assertThrows(
+        RuntimeException.class,
+        () ->
+            analyticsMessageListener.onMessage(
+                messageAsJson, type, schemaVersion, null, null, null));
 
     assertEquals(0, MDC.getCopyOfContextMap() == null ? 0 : MDC.getCopyOfContextMap().size());
   }

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,8 +44,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymizatio
 @ExtendWith(MockitoExtension.class)
 class CertificateAnalyticsEventV1PseudonymizerTest {
 
-  @Mock
-  private PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
+  @Mock private PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
 
   @InjectMocks
   private CertificateAnalyticsEventV1Pseudonymizer certificateAnalyticsEventV1Pseudonymizer;
@@ -56,9 +73,9 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   void shallThrowIfTryingToPseudonymizeUnknownMessage() {
     final var message = mock(CertificateAnalyticsMessage.class);
 
-    assertThrows(IllegalArgumentException.class, () ->
-        certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message)
-    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message));
   }
 
   @Test
@@ -66,8 +83,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var expected = "pseudonymized-id";
     final var message = draftMessageBuilder().build();
 
-    when(pseudonymizationTokenGenerator.id(message.getMessageId()))
-        .thenReturn(expected);
+    when(pseudonymizationTokenGenerator.id(message.getMessageId())).thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
@@ -133,13 +149,10 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnPseudonymizedCertificateUnitIdForPrivatePractitioners() {
     final var expected = "pseudonymized-certificate-unit-id";
-    final var message = draftMessageBuilder()
-        .certificate(
-            draftCertificateBuilder()
-                .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
-                .build()
-        )
-        .build();
+    final var message =
+        draftMessageBuilder()
+            .certificate(draftCertificateBuilder().unitId(PRIVATE_PRACTITIONER_UNIT_ID).build())
+            .build();
 
     when(pseudonymizationTokenGenerator.certificateUnitId(message.getCertificate().getUnitId()))
         .thenReturn(expected);
@@ -162,16 +175,16 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnPseudonymizedCertificateCareProviderIdForPrivatePractitioners() {
     final var expected = "pseudonymized-certificate-care-provider-id";
-    final var message = draftMessageBuilder()
-        .certificate(
-            draftCertificateBuilder()
-                .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
-                .build()
-        )
-        .build();
+    final var message =
+        draftMessageBuilder()
+            .certificate(
+                draftCertificateBuilder()
+                    .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
+                    .build())
+            .build();
 
     when(pseudonymizationTokenGenerator.certificateCareProviderId(
-        message.getCertificate().getCareProviderId()))
+            message.getCertificate().getCareProviderId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -181,13 +194,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
 
   @Test
   void shallReturnPseudonymizedCertificateRelationParentIdAsNullIfMissing() {
-    final var message = replaceMessageBuilder()
-        .certificate(
-            sentCertificateBuilder()
-                .parent(null)
-                .build()
-        )
-        .build();
+    final var message =
+        replaceMessageBuilder().certificate(sentCertificateBuilder().parent(null).build()).build();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
@@ -200,7 +208,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var message = replaceMessageBuilder().build();
 
     when(pseudonymizationTokenGenerator.parentCertificateId(
-        message.getCertificate().getParent().getId()))
+            message.getCertificate().getParent().getId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -210,13 +218,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
 
   @Test
   void shallReturnPseudonymizedCertificateRelationParentTypeAsNullIfMissing() {
-    final var message = replaceMessageBuilder()
-        .certificate(
-            sentCertificateBuilder()
-                .parent(null)
-                .build()
-        )
-        .build();
+    final var message =
+        replaceMessageBuilder().certificate(sentCertificateBuilder().parent(null).build()).build();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
@@ -292,13 +295,10 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnPseudonymizedEventUnitIdForPrivatePractitioners() {
     final var expected = "pseudonymized-event-unit-id";
-    final var message = draftMessageBuilder()
-        .event(
-            draftEventBuilder()
-                .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
-                .build()
-        )
-        .build();
+    final var message =
+        draftMessageBuilder()
+            .event(draftEventBuilder().unitId(PRIVATE_PRACTITIONER_UNIT_ID).build())
+            .build();
 
     when(pseudonymizationTokenGenerator.eventUnitId(message.getEvent().getUnitId()))
         .thenReturn(expected);
@@ -321,13 +321,11 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnPseudonymizedEventCareProviderIdForPrivatePractitioners() {
     final var expected = "pseudonymized-event-care-provider-id";
-    final var message = draftMessageBuilder()
-        .event(
-            draftEventBuilder()
-                .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
-                .build()
-        )
-        .build();
+    final var message =
+        draftMessageBuilder()
+            .event(
+                draftEventBuilder().careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID).build())
+            .build();
 
     when(pseudonymizationTokenGenerator.eventCareProviderId(message.getEvent().getCareProviderId()))
         .thenReturn(expected);
@@ -370,8 +368,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnPseudonymizedMessageId() {
     final var expected = "pseudonymized-message-id";
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+    final var message = receivedQuestionMessageBuilder().build();
 
     when(pseudonymizationTokenGenerator.messageId(message.getMessage().getId()))
         .thenReturn(expected);
@@ -384,8 +381,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnMessageAnswerId() {
     final var expected = "pseudonymized-message-id";
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+    final var message = receivedQuestionMessageBuilder().build();
 
     when(pseudonymizationTokenGenerator.messageAnswerId(message.getMessage().getAnswerId()))
         .thenReturn(expected);
@@ -398,8 +394,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnMessageReminderId() {
     final var expected = "pseudonymized-message-reminder-id";
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+    final var message = receivedQuestionMessageBuilder().build();
 
     when(pseudonymizationTokenGenerator.messageReminderId(message.getMessage().getReminderId()))
         .thenReturn(expected);

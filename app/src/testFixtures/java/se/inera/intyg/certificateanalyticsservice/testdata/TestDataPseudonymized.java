@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
@@ -32,7 +50,8 @@ public class TestDataPseudonymized {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PseudonymizedAnalyticsMessageBuilder draftPrivatePractitionerPseudonymizedMessageBuilder() {
+  public static PseudonymizedAnalyticsMessageBuilder
+      draftPrivatePractitionerPseudonymizedMessageBuilder() {
     return draftPseudonymizedMessageBuilder()
         .eventUnitId(HASHED_PRIVATE_PRACTITIONER_UNIT_ID)
         .eventCareProviderId(HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
@@ -104,10 +123,9 @@ public class TestDataPseudonymized {
         .messageType(TestDataConstants.MESSAGE_TYPE)
         .messageSent(TestDataConstants.MESSAGE_SENT)
         .messageLastDateToAnswer(TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER)
-        .messageQuestionIds(List.of(
-            TestDataConstants.MESSAGE_QUESTION_ID_1,
-            TestDataConstants.MESSAGE_QUESTION_ID_2)
-        )
+        .messageQuestionIds(
+            List.of(
+                TestDataConstants.MESSAGE_QUESTION_ID_1, TestDataConstants.MESSAGE_QUESTION_ID_2))
         .messageSenderId(TestDataConstants.MESSAGE_SENDER)
         .messageRecipientId(TestDataConstants.MESSAGE_RECIPIENT);
   }

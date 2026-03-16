@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,14 +34,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(SpringExtension.class)
 class PseudonymizationTokenGeneratorTest {
 
-  @InjectMocks
-  private PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
+  @InjectMocks private PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "key",
-        "thisisasecretkeythatisusedaspepper".getBytes(StandardCharsets.UTF_8)
-    );
+    ReflectionTestUtils.setField(
+        pseudonymizationTokenGenerator,
+        "key",
+        "thisisasecretkeythatisusedaspepper".getBytes(StandardCharsets.UTF_8));
     ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-test");
   }
 
@@ -110,8 +128,8 @@ class PseudonymizationTokenGeneratorTest {
       final var expected = "ztzNiCshMjAcTrGZzrQXrA";
       final var certificateCareProviderId = "certificateCareProviderId";
 
-      final var actual = pseudonymizationTokenGenerator.certificateCareProviderId(
-          certificateCareProviderId);
+      final var actual =
+          pseudonymizationTokenGenerator.certificateCareProviderId(certificateCareProviderId);
 
       assertEquals(expected, actual);
     }
@@ -209,10 +227,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedEventCareProviderIdFromSameValue() {
       final var eventCareProviderId = "eventCareProviderId";
 
-      final var eventCareProviderIdOne = pseudonymizationTokenGenerator.eventCareProviderId(
-          eventCareProviderId);
-      final var eventCareProviderIdTwo = pseudonymizationTokenGenerator.eventCareProviderId(
-          eventCareProviderId);
+      final var eventCareProviderIdOne =
+          pseudonymizationTokenGenerator.eventCareProviderId(eventCareProviderId);
+      final var eventCareProviderIdTwo =
+          pseudonymizationTokenGenerator.eventCareProviderId(eventCareProviderId);
 
       assertEquals(eventCareProviderIdOne, eventCareProviderIdTwo);
     }
@@ -231,10 +249,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedParentCertificateIdFromSameValue() {
       final var parentCertificateId = "parentCertificateId";
 
-      final var parentCertificateIdOne = pseudonymizationTokenGenerator.parentCertificateId(
-          parentCertificateId);
-      final var parentCertificateIdTwo = pseudonymizationTokenGenerator.parentCertificateId(
-          parentCertificateId);
+      final var parentCertificateIdOne =
+          pseudonymizationTokenGenerator.parentCertificateId(parentCertificateId);
+      final var parentCertificateIdTwo =
+          pseudonymizationTokenGenerator.parentCertificateId(parentCertificateId);
 
       assertEquals(parentCertificateIdOne, parentCertificateIdTwo);
     }
@@ -243,10 +261,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedCertificateUnitIdFromSameValue() {
       final var certificateUnitId = "certificateUnitId";
 
-      final var certificateUnitIdOne = pseudonymizationTokenGenerator.certificateUnitId(
-          certificateUnitId);
-      final var certificateUnitIdTwo = pseudonymizationTokenGenerator.certificateUnitId(
-          certificateUnitId);
+      final var certificateUnitIdOne =
+          pseudonymizationTokenGenerator.certificateUnitId(certificateUnitId);
+      final var certificateUnitIdTwo =
+          pseudonymizationTokenGenerator.certificateUnitId(certificateUnitId);
 
       assertEquals(certificateUnitIdOne, certificateUnitIdTwo);
     }
@@ -255,10 +273,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedCertificateCareProviderIdFromSameValue() {
       final var certificateCareProviderId = "certificateCareProviderId";
 
-      final var certificateCareProviderIdOne = pseudonymizationTokenGenerator.certificateCareProviderId(
-          certificateCareProviderId);
-      final var certificateCareProviderIdTwo = pseudonymizationTokenGenerator.certificateCareProviderId(
-          certificateCareProviderId);
+      final var certificateCareProviderIdOne =
+          pseudonymizationTokenGenerator.certificateCareProviderId(certificateCareProviderId);
+      final var certificateCareProviderIdTwo =
+          pseudonymizationTokenGenerator.certificateCareProviderId(certificateCareProviderId);
 
       assertEquals(certificateCareProviderIdOne, certificateCareProviderIdTwo);
     }
@@ -297,10 +315,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedMessageAnswerIdFromSameValue() {
       final var messageAnswerId = "messageAnswerId";
 
-      final var messageAnswerIdOne = pseudonymizationTokenGenerator.messageAnswerId(
-          messageAnswerId);
-      final var messageAnswerIdTwo = pseudonymizationTokenGenerator.messageAnswerId(
-          messageAnswerId);
+      final var messageAnswerIdOne =
+          pseudonymizationTokenGenerator.messageAnswerId(messageAnswerId);
+      final var messageAnswerIdTwo =
+          pseudonymizationTokenGenerator.messageAnswerId(messageAnswerId);
 
       assertEquals(messageAnswerIdOne, messageAnswerIdTwo);
     }
@@ -309,10 +327,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedMessageReminderIdFromSameValue() {
       final var messageReminderId = "messageReminderId";
 
-      final var messageReminderIdOne = pseudonymizationTokenGenerator.messageReminderId(
-          messageReminderId);
-      final var messageReminderIdTwo = pseudonymizationTokenGenerator.messageReminderId(
-          messageReminderId);
+      final var messageReminderIdOne =
+          pseudonymizationTokenGenerator.messageReminderId(messageReminderId);
+      final var messageReminderIdTwo =
+          pseudonymizationTokenGenerator.messageReminderId(messageReminderId);
 
       assertEquals(messageReminderIdOne, messageReminderIdTwo);
     }
@@ -340,22 +358,23 @@ class PseudonymizationTokenGeneratorTest {
       final var patientIdToken = pseudonymizationTokenGenerator.patientId(value);
       final var messageIdToken = pseudonymizationTokenGenerator.messageId(value);
 
-      final var tokens = List.of(
-          idToken,
-          staffIdToken,
-          sessionIdToken,
-          certificateIdToken,
-          unitIdToken,
-          careProviderIdToken,
-          patientIdToken,
-          messageIdToken
-      );
+      final var tokens =
+          List.of(
+              idToken,
+              staffIdToken,
+              sessionIdToken,
+              certificateIdToken,
+              unitIdToken,
+              careProviderIdToken,
+              patientIdToken,
+              messageIdToken);
 
       final var uniqueTokens = tokens.stream().distinct().count();
 
-      assertEquals(tokens.size(), uniqueTokens,
-          "Tokens for same value across types should be unique: %s".formatted(tokens)
-      );
+      assertEquals(
+          tokens.size(),
+          uniqueTokens,
+          "Tokens for same value across types should be unique: %s".formatted(tokens));
     }
 
     @Test
@@ -363,19 +382,17 @@ class PseudonymizationTokenGeneratorTest {
       final var value = "samevalue";
 
       final var certificateIdToken = pseudonymizationTokenGenerator.certificateId(value);
-      final var parentCertificateIdToken = pseudonymizationTokenGenerator.parentCertificateId(
-          value);
+      final var parentCertificateIdToken =
+          pseudonymizationTokenGenerator.parentCertificateId(value);
 
-      final var tokens = List.of(
-          certificateIdToken,
-          parentCertificateIdToken
-      );
+      final var tokens = List.of(certificateIdToken, parentCertificateIdToken);
 
       final var uniqueTokens = tokens.stream().distinct().count();
 
-      assertEquals(1, uniqueTokens,
-          "Tokens for same value across certificateId types should be same: %s".formatted(tokens)
-      );
+      assertEquals(
+          1,
+          uniqueTokens,
+          "Tokens for same value across certificateId types should be same: %s".formatted(tokens));
     }
 
     @Test
@@ -383,40 +400,35 @@ class PseudonymizationTokenGeneratorTest {
       final var value = "samevalue";
 
       final var eventUnitIdToken = pseudonymizationTokenGenerator.eventUnitId(value);
-      final var certificateUnitIdToken = pseudonymizationTokenGenerator.certificateUnitId(
-          value);
+      final var certificateUnitIdToken = pseudonymizationTokenGenerator.certificateUnitId(value);
 
-      final var tokens = List.of(
-          eventUnitIdToken,
-          certificateUnitIdToken
-      );
+      final var tokens = List.of(eventUnitIdToken, certificateUnitIdToken);
 
       final var uniqueTokens = tokens.stream().distinct().count();
 
-      assertEquals(1, uniqueTokens,
-          "Tokens for same value across unitId types should be same: %s".formatted(tokens)
-      );
+      assertEquals(
+          1,
+          uniqueTokens,
+          "Tokens for same value across unitId types should be same: %s".formatted(tokens));
     }
 
     @Test
     void shallGenerateSameTokenForSameValueForCareProviderIdTypes() {
       final var value = "samevalue";
 
-      final var eventCareProviderIdToken = pseudonymizationTokenGenerator.eventCareProviderId(
-          value);
-      final var certificateCareProviderIdToken = pseudonymizationTokenGenerator.certificateCareProviderId(
-          value);
+      final var eventCareProviderIdToken =
+          pseudonymizationTokenGenerator.eventCareProviderId(value);
+      final var certificateCareProviderIdToken =
+          pseudonymizationTokenGenerator.certificateCareProviderId(value);
 
-      final var tokens = List.of(
-          eventCareProviderIdToken,
-          certificateCareProviderIdToken
-      );
+      final var tokens = List.of(eventCareProviderIdToken, certificateCareProviderIdToken);
 
       final var uniqueTokens = tokens.stream().distinct().count();
 
-      assertEquals(1, uniqueTokens,
-          "Tokens for same value across careProviderId types should be same: %s".formatted(tokens)
-      );
+      assertEquals(
+          1,
+          uniqueTokens,
+          "Tokens for same value across careProviderId types should be same: %s".formatted(tokens));
     }
 
     @Test
@@ -427,17 +439,14 @@ class PseudonymizationTokenGeneratorTest {
       final var messageAnswerIdToken = pseudonymizationTokenGenerator.messageAnswerId(value);
       final var messageReminderIdToken = pseudonymizationTokenGenerator.messageReminderId(value);
 
-      final var tokens = List.of(
-          messageIdToken,
-          messageAnswerIdToken,
-          messageReminderIdToken
-      );
+      final var tokens = List.of(messageIdToken, messageAnswerIdToken, messageReminderIdToken);
 
       final var uniqueTokens = tokens.stream().distinct().count();
 
-      assertEquals(1, uniqueTokens,
-          "Tokens for same value across messageId types should be same: %s".formatted(tokens)
-      );
+      assertEquals(
+          1,
+          uniqueTokens,
+          "Tokens for same value across messageId types should be same: %s".formatted(tokens));
     }
   }
 
@@ -476,11 +485,11 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedEventCareProviderIdFromSameValueButDifferentContext() {
       final var eventCareProviderId = "eventCareProviderId";
 
-      final var eventCareProviderIdOne = pseudonymizationTokenGenerator.eventCareProviderId(
-          eventCareProviderId);
+      final var eventCareProviderIdOne =
+          pseudonymizationTokenGenerator.eventCareProviderId(eventCareProviderId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var eventCareProviderIdTwo = pseudonymizationTokenGenerator.eventCareProviderId(
-          eventCareProviderId);
+      final var eventCareProviderIdTwo =
+          pseudonymizationTokenGenerator.eventCareProviderId(eventCareProviderId);
 
       assertNotEquals(eventCareProviderIdOne, eventCareProviderIdTwo);
     }
@@ -511,11 +520,11 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedParentCertificateIdFromSameValueButDifferentContext() {
       final var parentCertificateId = "parentCertificateId";
 
-      final var parentCertificateIdOne = pseudonymizationTokenGenerator.parentCertificateId(
-          parentCertificateId);
+      final var parentCertificateIdOne =
+          pseudonymizationTokenGenerator.parentCertificateId(parentCertificateId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var parentCertificateIdTwo = pseudonymizationTokenGenerator.parentCertificateId(
-          parentCertificateId);
+      final var parentCertificateIdTwo =
+          pseudonymizationTokenGenerator.parentCertificateId(parentCertificateId);
 
       assertNotEquals(parentCertificateIdOne, parentCertificateIdTwo);
     }
@@ -524,24 +533,25 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedCertificateUnitIdFromSameValueButDifferentContext() {
       final var certificateUnitId = "certificateUnitId";
 
-      final var certificateUnitIdOne = pseudonymizationTokenGenerator.certificateUnitId(
-          certificateUnitId);
+      final var certificateUnitIdOne =
+          pseudonymizationTokenGenerator.certificateUnitId(certificateUnitId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var certificateUnitIdTwo = pseudonymizationTokenGenerator.certificateUnitId(
-          certificateUnitId);
+      final var certificateUnitIdTwo =
+          pseudonymizationTokenGenerator.certificateUnitId(certificateUnitId);
 
       assertNotEquals(certificateUnitIdOne, certificateUnitIdTwo);
     }
 
     @Test
-    void shallGenerateDifferentPseudonymizedCertificateCareProviderIdFromSameValueButDifferentContext() {
+    void
+        shallGenerateDifferentPseudonymizedCertificateCareProviderIdFromSameValueButDifferentContext() {
       final var certificateCareProviderId = "certificateCareProviderId";
 
-      final var certificateCareProviderIdOne = pseudonymizationTokenGenerator.certificateCareProviderId(
-          certificateCareProviderId);
+      final var certificateCareProviderIdOne =
+          pseudonymizationTokenGenerator.certificateCareProviderId(certificateCareProviderId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var certificateCareProviderIdTwo = pseudonymizationTokenGenerator.certificateCareProviderId(
-          certificateCareProviderId);
+      final var certificateCareProviderIdTwo =
+          pseudonymizationTokenGenerator.certificateCareProviderId(certificateCareProviderId);
 
       assertNotEquals(certificateCareProviderIdOne, certificateCareProviderIdTwo);
     }
@@ -583,11 +593,11 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedMessageAnswerIdFromSameValueButDifferentContext() {
       final var messageAnswerId = "messageAnswerId";
 
-      final var messageAnswerIdOne = pseudonymizationTokenGenerator.messageAnswerId(
-          messageAnswerId);
+      final var messageAnswerIdOne =
+          pseudonymizationTokenGenerator.messageAnswerId(messageAnswerId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageAnswerIdTwo = pseudonymizationTokenGenerator.messageAnswerId(
-          messageAnswerId);
+      final var messageAnswerIdTwo =
+          pseudonymizationTokenGenerator.messageAnswerId(messageAnswerId);
 
       assertNotEquals(messageAnswerIdOne, messageAnswerIdTwo);
     }
@@ -596,11 +606,11 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedMessageReminderIdFromSameValueButDifferentContext() {
       final var messageReminderId = "messageReminderId";
 
-      final var messageReminderIdOne = pseudonymizationTokenGenerator.messageReminderId(
-          messageReminderId);
+      final var messageReminderIdOne =
+          pseudonymizationTokenGenerator.messageReminderId(messageReminderId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageReminderIdTwo = pseudonymizationTokenGenerator.messageReminderId(
-          messageReminderId);
+      final var messageReminderIdTwo =
+          pseudonymizationTokenGenerator.messageReminderId(messageReminderId);
 
       assertNotEquals(messageReminderIdOne, messageReminderIdTwo);
     }

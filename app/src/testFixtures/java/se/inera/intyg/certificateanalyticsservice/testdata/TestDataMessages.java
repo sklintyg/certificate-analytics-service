@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
@@ -81,17 +99,9 @@ public class TestDataMessages {
         .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
-        .certificate(
-            sentCertificateBuilder().build()
-        )
-        .event(
-            draftEventBuilder().build()
-        )
-        .recipient(
-            CertificateAnalyticsEventRecipientV1.builder()
-                .id(RECIPIENT)
-                .build()
-        );
+        .certificate(sentCertificateBuilder().build())
+        .event(draftEventBuilder().build())
+        .recipient(CertificateAnalyticsEventRecipientV1.builder().id(RECIPIENT).build());
   }
 
   public static CertificateAnalyticsMessageV1Builder sentMessageBuilder() {
@@ -99,9 +109,7 @@ public class TestDataMessages {
         .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
-        .certificate(
-            sentCertificateBuilder().build()
-        )
+        .certificate(sentCertificateBuilder().build())
         .event(
             eventBuilder()
                 .messageType(EVENT_TYPE_CERTIFICATE_SENT)
@@ -112,13 +120,8 @@ public class TestDataMessages {
                 .careProviderId(CARE_PROVIDER_ID)
                 .sessionId(SESSION_ID)
                 .origin(ORIGIN)
-                .build()
-        )
-        .recipient(
-            CertificateAnalyticsEventRecipientV1.builder()
-                .id(RECIPIENT)
-                .build()
-        );
+                .build())
+        .recipient(CertificateAnalyticsEventRecipientV1.builder().id(RECIPIENT).build());
   }
 
   public static CertificateAnalyticsEventCertificateV1Builder sentCertificateBuilder() {
@@ -129,9 +132,7 @@ public class TestDataMessages {
         .patientId(PATIENT_ID)
         .type(CERTIFICATE_TYPE)
         .typeVersion(CERTIFICATE_TYPE_VERSION)
-        .parent(
-            replacedRelationBuilder().build()
-        );
+        .parent(replacedRelationBuilder().build());
   }
 
   public static CertificateAnalyticsEventCertificateRelationV1Builder replacedRelationBuilder() {
@@ -146,14 +147,12 @@ public class TestDataMessages {
             draftEventBuilder()
                 .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
                 .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
-                .build()
-        )
+                .build())
         .certificate(
             draftCertificateBuilder()
                 .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
                 .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
-                .build()
-        );
+                .build());
   }
 
   public static CertificateAnalyticsMessageV1Builder draftMessageBuilder() {
@@ -169,11 +168,8 @@ public class TestDataMessages {
                 .patientId(PATIENT_ID)
                 .type(CERTIFICATE_TYPE)
                 .typeVersion(CERTIFICATE_TYPE_VERSION)
-                .build()
-        )
-        .event(
-            draftEventBuilder().build()
-        );
+                .build())
+        .event(draftEventBuilder().build());
   }
 
   public static CertificateAnalyticsEventV1Builder draftEventBuilder() {
@@ -211,8 +207,7 @@ public class TestDataMessages {
                 .patientId(PATIENT_ID)
                 .type(CERTIFICATE_TYPE)
                 .typeVersion(CERTIFICATE_TYPE_VERSION)
-                .build()
-        )
+                .build())
         .event(
             eventBuilder()
                 .messageType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
@@ -223,13 +218,8 @@ public class TestDataMessages {
                 .careProviderId(CARE_PROVIDER_ID)
                 .sessionId(SESSION_ID)
                 .origin(ORIGIN)
-                .build()
-        )
-        .recipient(
-            CertificateAnalyticsEventRecipientV1.builder()
-                .id(RECIPIENT)
-                .build()
-        )
+                .build())
+        .recipient(CertificateAnalyticsEventRecipientV1.builder().id(RECIPIENT).build())
         .message(
             CertificateAnalyticsEventMessageV1.builder()
                 .id(MESSAGE_ID)
@@ -238,16 +228,10 @@ public class TestDataMessages {
                 .type(MESSAGE_TYPE)
                 .sender(MESSAGE_SENDER)
                 .recipient(MESSAGE_RECIPIENT)
-                .questionIds(
-                    List.of(
-                        MESSAGE_QUESTION_ID_1,
-                        MESSAGE_QUESTION_ID_2
-                    )
-                )
+                .questionIds(List.of(MESSAGE_QUESTION_ID_1, MESSAGE_QUESTION_ID_2))
                 .sent(MESSAGE_SENT)
                 .lastDateToAnswer(MESSAGE_LAST_DATE_TO_ANSWER)
-                .build()
-        );
+                .build());
   }
 
   private static CertificateAnalyticsEventCertificateV1Builder certificateBuilder() {

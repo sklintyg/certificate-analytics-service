@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import java.util.ArrayList;
@@ -44,14 +62,13 @@ public class EventMapper {
     return EventEntity.builder()
         .certificate(certificateEntity)
         .parentRelationCertificate(
-            message.getCertificateRelationParentId() == null ? null :
-                certificateEntityRepository.findByCertificateId(
-                        message.getCertificateRelationParentId())
-                    .orElse(null)
-        )
+            message.getCertificateRelationParentId() == null
+                ? null
+                : certificateEntityRepository
+                    .findByCertificateId(message.getCertificateRelationParentId())
+                    .orElse(null))
         .parentRelationType(
-            relationTypeRepository.findOrCreate(message.getCertificateRelationParentType())
-        )
+            relationTypeRepository.findOrCreate(message.getCertificateRelationParentType()))
         .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
@@ -66,52 +83,50 @@ public class EventMapper {
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
         .sender(
-            message.getMessageSenderId() == null ? null :
-                partyRepository.findOrCreate(message.getMessageSenderId())
-        )
+            message.getMessageSenderId() == null
+                ? null
+                : partyRepository.findOrCreate(message.getMessageSenderId()))
         .recipient(
-            message.getMessageSenderId() == null ?
-                partyRepository.findOrCreate(message.getRecipientId()) :
-                partyRepository.findOrCreate(message.getMessageRecipientId())
-        )
+            message.getMessageSenderId() == null
+                ? partyRepository.findOrCreate(message.getRecipientId())
+                : partyRepository.findOrCreate(message.getMessageRecipientId()))
         .messageId(message.getId())
         .messageComplementQuestionIdsCount(
-            message.getMessageQuestionIds() == null ? null :
-                message.getMessageQuestionIds().size()
-        )
+            message.getMessageQuestionIds() == null ? null : message.getMessageQuestionIds().size())
         .build();
   }
 
   public PseudonymizedAnalyticsMessage toDomain(EventEntity entity) {
-    final var domainBuilder = PseudonymizedAnalyticsMessage.builder()
-        .id(entity.getMessageId())
-        .eventTimestamp(entity.getTimestamp())
-        .eventMessageType(entity.getEventType().getEventType())
-        .certificatePatientId(entity.getPatient().getPatientId())
-        .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
-        .eventRole(entity.getRole() != null ? entity.getRole().getRole() : null)
-        .eventUnitId(entity.getUnit() != null ? entity.getUnit().getHsaId() : null)
-        .eventCareProviderId(
-            entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
-        .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
-        .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
-        .recipientId(
-            entity.getMessage() != null || entity.getRecipient() == null ? null :
-                entity.getRecipient().getParty()
-        )
-        .certificateId(entity.getCertificate().getCertificateId())
-        .certificateType(entity.getCertificate().getCertificateType())
-        .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
-        .certificateRelationParentId(
-            entity.getParentRelationCertificate() == null ? null :
-                entity.getParentRelationCertificate().getCertificateId()
-        )
-        .certificateRelationParentType(
-            entity.getParentRelationType() == null ? null :
-                entity.getParentRelationType().getRelationType()
-        )
-        .certificateUnitId(entity.getCertificateUnit().getHsaId())
-        .certificateCareProviderId(entity.getCertificateCareProvider().getHsaId());
+    final var domainBuilder =
+        PseudonymizedAnalyticsMessage.builder()
+            .id(entity.getMessageId())
+            .eventTimestamp(entity.getTimestamp())
+            .eventMessageType(entity.getEventType().getEventType())
+            .certificatePatientId(entity.getPatient().getPatientId())
+            .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
+            .eventRole(entity.getRole() != null ? entity.getRole().getRole() : null)
+            .eventUnitId(entity.getUnit() != null ? entity.getUnit().getHsaId() : null)
+            .eventCareProviderId(
+                entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
+            .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
+            .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
+            .recipientId(
+                entity.getMessage() != null || entity.getRecipient() == null
+                    ? null
+                    : entity.getRecipient().getParty())
+            .certificateId(entity.getCertificate().getCertificateId())
+            .certificateType(entity.getCertificate().getCertificateType())
+            .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
+            .certificateRelationParentId(
+                entity.getParentRelationCertificate() == null
+                    ? null
+                    : entity.getParentRelationCertificate().getCertificateId())
+            .certificateRelationParentType(
+                entity.getParentRelationType() == null
+                    ? null
+                    : entity.getParentRelationType().getRelationType())
+            .certificateUnitId(entity.getCertificateUnit().getHsaId())
+            .certificateCareProviderId(entity.getCertificateCareProvider().getHsaId());
 
     if (entity.getMessage() != null) {
       final var message = entity.getMessage();
