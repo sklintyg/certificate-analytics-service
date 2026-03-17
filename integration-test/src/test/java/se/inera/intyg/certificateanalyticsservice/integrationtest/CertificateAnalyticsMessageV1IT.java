@@ -58,7 +58,7 @@ class CertificateAnalyticsMessageV1IT {
 
   @Autowired private JmsTemplate jmsTemplate;
 
-  @Value("${certificate.analytics.message.queue.name}")
+  @Value("${app.jms.queue-name}")
   private String queueName;
 
   @LocalServerPort private int port;

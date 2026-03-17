@@ -1,0 +1,26 @@
+app:
+  jms:
+    queue-name: dev.certificate.analytics.message.queue
+  pseudonymization:
+    context: dev
+    key: thisisafakekeyforlocaldev
+
+database:
+  name: certificate_analytics_service
+  server: localhost
+  password: cas
+  username: cas
+
+logging:
+  structured:
+    format:
+      console: ""
+
+server:
+  port: 18050
+
+spring:
+  activemq:
+    broker-url: "tcp://localhost:61616?jms.redeliveryPolicy.maximumRedeliveries=5&jms.redeliveryPolicy.initialRedeliveryDelay=1000&jms.redeliveryPolicy.useExponentialBackOff=true&jms.redeliveryPolicy.backOffMultiplier=2.0&jms.redeliveryPolicy.maximumRedeliveryDelay=120000&"
+    user: activemqUser
+    password: activemqPassword

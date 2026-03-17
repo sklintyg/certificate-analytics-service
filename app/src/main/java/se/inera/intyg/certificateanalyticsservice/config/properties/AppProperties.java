@@ -16,17 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.inera.intyg.certificateanalyticsservice;
+package se.inera.intyg.certificateanalyticsservice.config.properties;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
-@SpringBootApplication
-@ConfigurationPropertiesScan
-public class CertificateAnalyticsServiceApplication {
+@Validated
+@ConfigurationProperties(prefix = "app")
+public record AppProperties(
+    @NotNull @Valid Pseudonymization pseudonymization, @NotNull @Valid Jms jms) {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CertificateAnalyticsServiceApplication.class, args);
-  }
+  public record Pseudonymization(@NotBlank String key, @NotBlank String context) {}
+
+  public record Jms(@NotBlank String queueName) {}
 }

@@ -1,0 +1,24 @@
+database:
+  port: 3306
+
+logging:
+  structured:
+    format:
+      console: ecs
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: certificate-analytics-service
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  datasource:
+    url: "jdbc:mysql://${database.server}:${database.port}/${database.name}?useSSL=false&serverTimezone=Europe/Stockholm&allowPublicKeyRetrieval=true"
+    username: "${database.username}"
+    password: "${database.password}"
+  jpa:
+    open-in-view: false
+  liquibase:
+    change-log: classpath:changelog/db.changelog-master.xml
