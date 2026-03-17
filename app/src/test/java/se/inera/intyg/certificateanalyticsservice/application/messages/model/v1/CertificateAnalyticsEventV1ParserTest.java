@@ -27,14 +27,13 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessag
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replaceMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.toJson;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.UncheckedIOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateAnalyticsEventV1ParserTest {
@@ -62,7 +61,7 @@ class CertificateAnalyticsEventV1ParserTest {
   }
 
   @Test
-  void shallReturnParsedEvent() throws JsonProcessingException {
+  void shallReturnParsedEvent() throws JacksonException {
     final var excepted = replaceMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
@@ -75,14 +74,13 @@ class CertificateAnalyticsEventV1ParserTest {
   }
 
   @Test
-  void shallThrowUncheckedIOExceptionIfMessageCannotBeDeserialized()
-      throws JsonProcessingException {
+  void shallThrowJacksonExceptionIfMessageCannotBeDeserialized() throws JacksonException {
     final var excepted = draftMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
     when(objectMapper.readValue(messageAsJson, CertificateAnalyticsMessageV1.class))
-        .thenThrow(JsonProcessingException.class);
+        .thenThrow(JacksonException.class);
 
-    assertThrows(UncheckedIOException.class, () -> parser.parse(messageAsJson));
+    assertThrows(JacksonException.class, () -> parser.parse(messageAsJson));
   }
 }

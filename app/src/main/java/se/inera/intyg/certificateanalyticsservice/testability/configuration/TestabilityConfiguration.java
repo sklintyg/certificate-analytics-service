@@ -33,7 +33,7 @@ public class TestabilityConfiguration {
   public static final String TESTABILITY_PROFILE = "testability";
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) {
     http.csrf(csrf -> csrf.ignoringRequestMatchers("/testability/**"))
         .authorizeHttpRequests(
             auth ->

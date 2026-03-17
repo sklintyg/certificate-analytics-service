@@ -21,7 +21,7 @@ package se.inera.intyg.certificateanalyticsservice.integrationtest.util;
 import static org.awaitility.Awaitility.await;
 
 import java.time.Duration;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 
 public class TestabilityUtil {

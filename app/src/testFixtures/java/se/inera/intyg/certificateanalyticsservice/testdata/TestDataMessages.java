@@ -51,12 +51,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.USER_ID;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1;
@@ -69,6 +63,8 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventV1.CertificateAnalyticsEventV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1.CertificateAnalyticsMessageV1Builder;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class TestDataMessages {
 
@@ -79,19 +75,11 @@ public class TestDataMessages {
   }
 
   private static ObjectMapper build() {
-    final var om = new ObjectMapper();
-    om.registerModule(new JavaTimeModule());
-    om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    return om;
+    return JsonMapper.builder().build();
   }
 
   public static String toJson(CertificateAnalyticsMessageV1 message) {
-    try {
-      return OBJECT_MAPPER.writeValueAsString(message);
-    } catch (JsonProcessingException e) {
-      throw new UncheckedIOException(e);
-    }
+    return OBJECT_MAPPER.writeValueAsString(message);
   }
 
   public static CertificateAnalyticsMessageV1Builder replaceMessageBuilder() {
