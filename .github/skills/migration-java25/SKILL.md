@@ -11,22 +11,26 @@ Use this skill to **upgrade a Spring Boot application from Java 21 to Java 25**.
 ## Prerequisites
 
 Before running this skill, ensure:
-1. The **intyg BOM** has been updated with `javaVersion=25`
-2. The `intygBomVersion` in `gradle.properties` points to the updated BOM
-3. **Gradle 9** is already in place (run `migration-gradle9` skill first)
+1. The **migration-analyze** skill has been run and any blocking issues have been addressed
+2. The **intyg BOM** has been updated with `javaVersion=25`
+3. The `intygBomVersion` in `gradle.properties` points to the updated BOM
 4. **Java 25 JDK** is installed and available on the system
 5. **Docker builder/runtime images** have been updated to Java 25 (handled externally)
 
 If prerequisites are not met, report what's missing and stop.
 
+**Important context from real migrations:** For BOM-managed intyg services, Java 25 typically
+requires **zero source code changes**. The BOM controls the Java toolchain version, so updating
+the BOM version is usually sufficient. This skill exists to verify compatibility and catch edge
+cases.
+
 ## Migration procedure
 
-### Step 1: Verify Java toolchain configuration
+### Step 1: Update BOM version for Java 25
 
-Check that the Java version is configured correctly:
-
-1. Read `gradle.properties` → verify `intygBomVersion` is the updated version
-2. Check `build.gradle` → the toolchain should reference `javaVersion` from BOM properties:
+1. Read `gradle.properties` → check current `intygBomVersion`
+2. Update `intygBomVersion` to the version that provides `javaVersion=25`
+3. The BOM controls the Java toolchain via:
    ```groovy
    java {
        toolchain {
@@ -34,12 +38,13 @@ Check that the Java version is configured correctly:
        }
    }
    ```
-3. If `javaVersion` is hardcoded instead of coming from BOM, update it to `25`
-4. Verify `JAVA_HOME` or Gradle toolchain auto-detection can find Java 25
+4. If `javaVersion` is hardcoded instead of coming from BOM, update it to `25`
+5. Verify `JAVA_HOME` or Gradle toolchain auto-detection can find Java 25
 
-### Step 2: Scan for Java 25 incompatibilities
+### Step 2: Verify — scan for Java 25 incompatibilities
 
-Search all `*.java` files under `src/` for potential issues:
+Search all `*.java` files under `src/` for potential issues. **In practice, these are rarely
+found** in BOM-managed services, but verify anyway:
 
 #### HIGH severity — likely to break
 
@@ -137,10 +142,18 @@ If tests fail:
 
 Report:
 - Java version before and after
-- Any source code changes made and why
+- Any source code changes made and why (often: none)
 - Any JVM argument changes
 - Build and test results
 - Any issues that need manual attention (e.g., BOM Lombok version)
+
+## Real-world migration result: certificate-analytics-service
+
+When migrating `certificate-analytics-service` from Java 21 to Java 25:
+- **Zero source code changes** were required
+- Only the `intygBomVersion` in `gradle.properties` was updated
+- Build, unit tests, integration tests, and bootRun all passed without changes
+- This is the expected outcome for BOM-managed projects using standard libraries
 
 ## Java 21 → 25 new features (informational)
 
@@ -162,3 +175,4 @@ developer asks — this skill is about compatibility, not modernization.
 - **`javax.crypto.*` is safe** — it's part of `java.base`, not Jakarta EE
 - If the BOM doesn't provide Java 25-compatible library versions, report this but don't
   attempt to override individual library versions
+- **This step should be done BEFORE Gradle 9 and Spring Boot 4** in the migration sequence

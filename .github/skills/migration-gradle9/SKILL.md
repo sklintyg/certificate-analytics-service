@@ -11,9 +11,11 @@ Use this skill to **upgrade a Spring Boot application from Gradle 8.x to Gradle 
 ## Prerequisites
 
 Before running this skill, ensure:
-1. The **intyg BOM** has been updated with Gradle 9-compatible plugin versions in the version catalog
-2. The `intygBomVersion` in `gradle.properties` points to the updated BOM
-3. Java 17+ is available (Gradle 9 requires JVM 17+ for the daemon)
+1. The **migration-analyze** skill has been run and any blocking issues have been addressed
+2. **Java 25** migration is complete (run `migration-java25` skill first)
+3. The **intyg BOM** has been updated with Gradle 9-compatible plugin versions in the version catalog
+4. The `intygBomVersion` in `gradle.properties` points to the updated BOM
+5. Java 17+ is available (Gradle 9 requires JVM 17+ for the daemon)
 
 If prerequisites are not met, report what's missing and stop.
 
@@ -32,6 +34,54 @@ before upgrading to Gradle 9, as deprecated APIs from Gradle 8.x are removed in 
 ### Step 2: Fix build script issues BEFORE upgrading wrapper
 
 Analyze and fix all `*.gradle` files in the project. Common issues:
+
+#### Maven repository URL syntax (HIGH — BREAKS BUILD)
+
+Gradle 9 requires assignment syntax for repository URLs:
+```groovy
+// BROKEN in Gradle 9:
+maven { url "https://nexus.drift.inera.se/repository/it-public/" }
+
+// FIX: Use equals sign assignment:
+maven {
+    url = "https://nexus.drift.inera.se/repository/it-public/"
+    content {
+        includeGroupByRegex "se\\.inera.*"
+    }
+}
+```
+
+**Also recommended:** Add `content {}` block to restrict which dependencies are resolved from
+custom repositories. This improves build security and performance.
+
+#### Spotless googleJavaFormat ordering (HIGH — USES WRONG VERSION)
+
+The `googleJavaFormat()` call must come **before** `removeUnusedImports()`. Otherwise, Spotless
+uses a bundled google-java-format version instead of the configured one:
+```groovy
+// BROKEN (uses bundled version):
+spotless {
+    java {
+        removeUnusedImports()
+        forbidWildcardImports()
+        googleJavaFormat(googleJavaFormatVersion)  // Too late!
+    }
+}
+
+// FIX: googleJavaFormat FIRST:
+spotless {
+    java {
+        licenseHeaderFile(rootProject.file('spotless.license.txt'), 'package ')
+        googleJavaFormat(googleJavaFormatVersion)  // Must be before removeUnusedImports
+        removeUnusedImports()
+        forbidWildcardImports()
+        formatAnnotations()
+    }
+}
+```
+
+**Also:** `googleJavaFormatVersion` needs to be at least **1.35.0** for Gradle 9 / Groovy 4
+compatibility. If the BOM provides an older version, report that the BOM needs updating.
 
 #### Groovy 4 compatibility (Gradle 9 ships Groovy 4.0.27)
 
@@ -167,6 +217,19 @@ Report:
 - Build and test results
 - Any issues that need manual attention
 
+## Real-world migration result: certificate-analytics-service
+
+When migrating `certificate-analytics-service` from Gradle 8.14.4 to Gradle 9.4.0, three changes
+were needed:
+
+1. **Maven URL syntax**: Added `=` sign to `url` assignment in repository block
+2. **Content filtering**: Added `content { includeGroupByRegex "se\\.inera.*" }` for custom repo
+3. **Spotless ordering**: Moved `googleJavaFormat(googleJavaFormatVersion)` before
+   `removeUnusedImports()` — otherwise Spotless used a bundled version instead of the configured one.
+   This also required updating `googleJavaFormatVersion` to `1.35.0` in the BOM.
+
+All three changes were in `build.gradle` (root). No source code changes were needed.
+
 ## Common patterns in intyg services
 
 These patterns are common across intyg services and have known Gradle 9 considerations:
@@ -229,3 +292,4 @@ correctly.
 - Focus on making the existing build scripts work with Gradle 9.4.0
 - If the BOM version needs updating, tell the developer but do not change it yourself
   unless they confirm the correct version
+- **This step should be done AFTER Java 25 and BEFORE Spring Boot 4** in the migration sequence
