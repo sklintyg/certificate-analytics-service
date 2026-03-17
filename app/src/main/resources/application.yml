@@ -1,10 +1,3 @@
-app:
-  jms:
-    queue-name: "${JMS_QUEUE_NAME:}"
-  pseudonymization:
-    context: "${PSEUDONYMIZATION_CONTEXT:}"
-    key: "${PSEUDONYMIZATION_KEY:}"
-
 database:
   port: 3306
 
