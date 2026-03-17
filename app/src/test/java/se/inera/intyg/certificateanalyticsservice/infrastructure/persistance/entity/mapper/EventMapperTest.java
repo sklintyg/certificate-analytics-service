@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,34 +60,20 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 @ExtendWith(MockitoExtension.class)
 class EventMapperTest {
 
-  @InjectMocks
-  private EventMapper eventMapper;
-  @Mock
-  private UnitRepository unitRepository;
-  @Mock
-  private CareProviderRepository careProviderRepository;
-  @Mock
-  private UserRepository userRepository;
-  @Mock
-  private SessionRepository sessionRepository;
-  @Mock
-  private OriginRepository originRepository;
-  @Mock
-  private EventTypeRepository eventTypeRepository;
-  @Mock
-  private RoleRepository roleRepository;
-  @Mock
-  private PartyRepository partyRepository;
-  @Mock
-  private CertificateEntityMapper certificateEntityMapper;
-  @Mock
-  private MessageEntityMapper messageEntityMapper;
-  @Mock
-  private PatientRepository patientRepository;
-  @Mock
-  private CertificateEntityRepository certificateEntityRepository;
-  @Mock
-  private RelationTypeRepository relationTypeRepository;
+  @InjectMocks private EventMapper eventMapper;
+  @Mock private UnitRepository unitRepository;
+  @Mock private CareProviderRepository careProviderRepository;
+  @Mock private UserRepository userRepository;
+  @Mock private SessionRepository sessionRepository;
+  @Mock private OriginRepository originRepository;
+  @Mock private EventTypeRepository eventTypeRepository;
+  @Mock private RoleRepository roleRepository;
+  @Mock private PartyRepository partyRepository;
+  @Mock private CertificateEntityMapper certificateEntityMapper;
+  @Mock private MessageEntityMapper messageEntityMapper;
+  @Mock private PatientRepository patientRepository;
+  @Mock private CertificateEntityRepository certificateEntityRepository;
+  @Mock private RelationTypeRepository relationTypeRepository;
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
@@ -95,36 +99,37 @@ class EventMapperTest {
     when(relationTypeRepository.findOrCreate(message.getCertificateRelationParentType()))
         .thenReturn(expectedRelationType);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
-    when(careProviderRepository.findOrCreate(message.getEventCareProviderId())).thenReturn(
-        expectedCareProvider);
+    when(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
+        .thenReturn(expectedCareProvider);
     when(userRepository.findOrCreate(message.getEventUserId())).thenReturn(expectedUser);
     when(sessionRepository.findOrCreate(message.getEventSessionId())).thenReturn(expectedSession);
     when(originRepository.findOrCreate(message.getEventOrigin())).thenReturn(expectedOrigin);
-    when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
-        expectedEventType);
+    when(eventTypeRepository.findOrCreate(message.getEventMessageType()))
+        .thenReturn(expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
     when(partyRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
     when(patientRepository.findOrCreate(message.getCertificatePatientId()))
         .thenReturn(expectedPatient);
 
-    final var expected = EventEntity.builder()
-        .certificate(expectedCertificate)
-        .parentRelationCertificate(expectedParentCertificate)
-        .parentRelationType(expectedRelationType)
-        .certificateUnit(expectedCertificateUnit)
-        .certificateCareProvider(expectedCertificateCareProvider)
-        .patient(expectedPatient)
-        .unit(expectedUnit)
-        .careProvider(expectedCareProvider)
-        .user(expectedUser)
-        .session(expectedSession)
-        .timestamp(message.getEventTimestamp())
-        .origin(expectedOrigin)
-        .eventType(expectedEventType)
-        .role(expectedRole)
-        .recipient(expectedRecipient)
-        .messageId(message.getId())
-        .build();
+    final var expected =
+        EventEntity.builder()
+            .certificate(expectedCertificate)
+            .parentRelationCertificate(expectedParentCertificate)
+            .parentRelationType(expectedRelationType)
+            .certificateUnit(expectedCertificateUnit)
+            .certificateCareProvider(expectedCertificateCareProvider)
+            .patient(expectedPatient)
+            .unit(expectedUnit)
+            .careProvider(expectedCareProvider)
+            .user(expectedUser)
+            .session(expectedSession)
+            .timestamp(message.getEventTimestamp())
+            .origin(expectedOrigin)
+            .eventType(expectedEventType)
+            .role(expectedRole)
+            .recipient(expectedRecipient)
+            .messageId(message.getId())
+            .build();
 
     final var result = eventMapper.toEntity(message);
     assertEquals(expected, result);
@@ -150,36 +155,37 @@ class EventMapperTest {
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(messageEntityMapper.map(message)).thenReturn(expectedMessage);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
-    when(careProviderRepository.findOrCreate(message.getEventCareProviderId())).thenReturn(
-        expectedCareProvider);
+    when(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
+        .thenReturn(expectedCareProvider);
     when(userRepository.findOrCreate(message.getEventUserId())).thenReturn(expectedUser);
     when(sessionRepository.findOrCreate(message.getEventSessionId())).thenReturn(expectedSession);
     when(originRepository.findOrCreate(message.getEventOrigin())).thenReturn(expectedOrigin);
-    when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
-        expectedEventType);
+    when(eventTypeRepository.findOrCreate(message.getEventMessageType()))
+        .thenReturn(expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
     when(partyRepository.findOrCreate(message.getMessageSenderId())).thenReturn(expectedSender);
-    when(partyRepository.findOrCreate(message.getMessageRecipientId())).thenReturn(
-        expectedRecipient);
+    when(partyRepository.findOrCreate(message.getMessageRecipientId()))
+        .thenReturn(expectedRecipient);
 
-    final var expected = EventEntity.builder()
-        .certificate(expectedCertificate)
-        .certificateUnit(expectedCertificateUnit)
-        .certificateCareProvider(expectedCertificateCareProvider)
-        .unit(expectedUnit)
-        .careProvider(expectedCareProvider)
-        .user(expectedUser)
-        .session(expectedSession)
-        .timestamp(message.getEventTimestamp())
-        .origin(expectedOrigin)
-        .eventType(expectedEventType)
-        .role(expectedRole)
-        .sender(expectedSender)
-        .recipient(expectedRecipient)
-        .messageId(message.getId())
-        .message(expectedMessage)
-        .messageComplementQuestionIdsCount(message.getMessageQuestionIds().size())
-        .build();
+    final var expected =
+        EventEntity.builder()
+            .certificate(expectedCertificate)
+            .certificateUnit(expectedCertificateUnit)
+            .certificateCareProvider(expectedCertificateCareProvider)
+            .unit(expectedUnit)
+            .careProvider(expectedCareProvider)
+            .user(expectedUser)
+            .session(expectedSession)
+            .timestamp(message.getEventTimestamp())
+            .origin(expectedOrigin)
+            .eventType(expectedEventType)
+            .role(expectedRole)
+            .sender(expectedSender)
+            .recipient(expectedRecipient)
+            .messageId(message.getId())
+            .message(expectedMessage)
+            .messageComplementQuestionIdsCount(message.getMessageQuestionIds().size())
+            .build();
 
     final var result = eventMapper.toEntity(message);
     assertEquals(expected, result);

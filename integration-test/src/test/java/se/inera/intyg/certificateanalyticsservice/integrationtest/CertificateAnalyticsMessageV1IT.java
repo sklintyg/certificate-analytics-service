@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,17 +54,14 @@ import se.inera.intyg.certificateanalyticsservice.integrationtest.util.Testabili
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class CertificateAnalyticsMessageV1IT {
 
-  @Autowired
-  private TestRestTemplate restTemplate;
+  @Autowired private TestRestTemplate restTemplate;
 
-  @Autowired
-  private JmsTemplate jmsTemplate;
+  @Autowired private JmsTemplate jmsTemplate;
 
   @Value("${app.jms.queue-name}")
   private String queueName;
 
-  @LocalServerPort
-  private int port;
+  @LocalServerPort private int port;
 
   private JmsUtil jmsUtil;
   private TestabilityUtil testabilityUtil;
@@ -72,10 +87,8 @@ class CertificateAnalyticsMessageV1IT {
 
     jmsUtil.publishMessage(message);
 
-    final var actual = testabilityUtil.awaitProcessed(
-        message.getMessageId(),
-        Duration.ofSeconds(5)
-    );
+    final var actual =
+        testabilityUtil.awaitProcessed(message.getMessageId(), Duration.ofSeconds(5));
 
     assertEquals(expected, actual);
   }
@@ -84,35 +97,25 @@ class CertificateAnalyticsMessageV1IT {
   void shallProcessAndPersistMessageWithRelation() {
     final var expected = sentPseudonymizedMessageBuilder().build();
 
-    final var firstMessage = sentMessageBuilder()
-        .messageId(UUID.randomUUID().toString())
-        .certificate(
-            sentCertificateBuilder()
-                .id(CERTIFICATE_PARENT_ID)
-                .parent(null)
-                .build()
-        )
-        .build();
+    final var firstMessage =
+        sentMessageBuilder()
+            .messageId(UUID.randomUUID().toString())
+            .certificate(sentCertificateBuilder().id(CERTIFICATE_PARENT_ID).parent(null).build())
+            .build();
     jmsUtil.publishMessage(firstMessage);
 
-    final var message = sentMessageBuilder()
-        .certificate(
-            sentCertificateBuilder()
-                .parent(
-                    replacedRelationBuilder()
-                        .id(CERTIFICATE_PARENT_ID)
-                        .build()
-                )
-                .build()
-        )
-        .build();
+    final var message =
+        sentMessageBuilder()
+            .certificate(
+                sentCertificateBuilder()
+                    .parent(replacedRelationBuilder().id(CERTIFICATE_PARENT_ID).build())
+                    .build())
+            .build();
 
     jmsUtil.publishMessage(message);
 
-    final var actual = testabilityUtil.awaitProcessed(
-        message.getMessageId(),
-        Duration.ofSeconds(5)
-    );
+    final var actual =
+        testabilityUtil.awaitProcessed(message.getMessageId(), Duration.ofSeconds(5));
 
     assertEquals(expected, actual);
   }
@@ -124,10 +127,8 @@ class CertificateAnalyticsMessageV1IT {
 
     jmsUtil.publishMessage(message);
 
-    final var actual = testabilityUtil.awaitProcessed(
-        message.getMessageId(),
-        Duration.ofSeconds(5)
-    );
+    final var actual =
+        testabilityUtil.awaitProcessed(message.getMessageId(), Duration.ofSeconds(5));
 
     assertEquals(expected, actual);
   }
@@ -139,10 +140,8 @@ class CertificateAnalyticsMessageV1IT {
 
     jmsUtil.publishMessage(message);
 
-    final var actual = testabilityUtil.awaitProcessed(
-        message.getMessageId(),
-        Duration.ofSeconds(5)
-    );
+    final var actual =
+        testabilityUtil.awaitProcessed(message.getMessageId(), Duration.ofSeconds(5));
 
     assertEquals(expected, actual);
   }
@@ -156,10 +155,8 @@ class CertificateAnalyticsMessageV1IT {
 
     jmsUtil.publishMessage(message);
 
-    final var actual = testabilityUtil.awaitProcessed(
-        message.getMessageId(),
-        Duration.ofSeconds(5)
-    );
+    final var actual =
+        testabilityUtil.awaitProcessed(message.getMessageId(), Duration.ofSeconds(5));
 
     assertEquals(expected, actual);
   }

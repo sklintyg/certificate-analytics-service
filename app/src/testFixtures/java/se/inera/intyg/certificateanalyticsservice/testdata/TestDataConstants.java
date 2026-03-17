@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
 import java.time.LocalDate;
@@ -14,7 +32,8 @@ public final class TestDataConstants {
   public static final String UNIT_ID = "TSTNMT2321000156-ALMC";
   public static final String CARE_PROVIDER_ID = "TSTNMT2321000156-ALFA";
   public static final String PRIVATE_PRACTITIONER_UNIT_ID = "TSTNMT2321000156-WEBCERT99999";
-  public static final String PRIVATE_PRACTITIONER_CARE_PROVIDER_ID = "TSTNMT2321000156-WEBCERT99999";
+  public static final String PRIVATE_PRACTITIONER_CARE_PROVIDER_ID =
+      "TSTNMT2321000156-WEBCERT99999";
   public static final String USER_ID = "TSTNMT2321000156-DRAA";
   public static final String PATIENT_ID = "19401130-6125";
   public static final String ROLE = "LAKARE";
@@ -46,12 +65,12 @@ public final class TestDataConstants {
   public static final String HASHED_PATIENT_ID = "v4WI46Ymy08FKdhJJFDocw";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
   public static final String HASHED_PRIVATE_PRACTITIONER_UNIT_ID = "xStOJ2OE_hQtBFLdsn-hFg";
-  public static final String HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID = "3ULOCud84JbSZDdQ7qUDFg";
+  public static final String HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID =
+      "3ULOCud84JbSZDdQ7qUDFg";
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
   public static final String HASHED_MESSAGE_ID = "6Z8etRcPCMrOc8Q629-9LA";
   public static final String HASHED_MESSAGE_ANSWER_ID = "xzojWDGPoK1OBj047LRK2Q";
   public static final String HASHED_MESSAGE_REMINDER_ID = "9q_f1G8muLQuzm-4yfhcgg";
 
-  private TestDataConstants() {
-  }
+  private TestDataConstants() {}
 }

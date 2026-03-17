@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
@@ -55,10 +73,7 @@ public class TestDataEntities {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
         .parentRelationCertificate(
-            certificateEntity()
-                .certificateId(HASHED_CERTIFICATE_PARENT_ID)
-                .build()
-        )
+            certificateEntity().certificateId(HASHED_CERTIFICATE_PARENT_ID).build())
         .parentRelationType(relationTypeEntityBuilder().build())
         .certificateUnit(unitEntity())
         .certificateCareProvider(careProviderEntity())
@@ -84,10 +99,7 @@ public class TestDataEntities {
         .messageId(HASHED_ID)
         .timestamp(TIMESTAMP)
         .eventType(
-            EventTypeEntity.builder()
-                .eventType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
-                .build()
-        )
+            EventTypeEntity.builder().eventType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT).build())
         .role(roleEntity())
         .patient(patientEntity())
         .unit(unitEntity())
@@ -107,74 +119,51 @@ public class TestDataEntities {
   }
 
   public static PatientEntity patientEntity() {
-    return PatientEntity.builder()
-        .patientId(HASHED_PATIENT_ID)
-        .build();
+    return PatientEntity.builder().patientId(HASHED_PATIENT_ID).build();
   }
 
   public static CareProviderEntity careProviderEntity() {
-    return CareProviderEntity.builder()
-        .hsaId(CARE_PROVIDER_ID)
-        .build();
+    return CareProviderEntity.builder().hsaId(CARE_PROVIDER_ID).build();
   }
 
   public static UnitEntity unitEntity() {
-    return UnitEntity.builder()
-        .hsaId(UNIT_ID)
-        .build();
+    return UnitEntity.builder().hsaId(UNIT_ID).build();
   }
 
   public static UserEntity userEntity() {
-    return UserEntity.builder()
-        .userId(HASHED_USER_ID)
-        .build();
+    return UserEntity.builder().userId(HASHED_USER_ID).build();
   }
 
   public static SessionEntity sessionEntity() {
-    return SessionEntity.builder()
-        .sessionId(HASHED_SESSION_ID)
-        .build();
+    return SessionEntity.builder().sessionId(HASHED_SESSION_ID).build();
   }
 
   public static OriginEntity originEntity() {
-    return OriginEntity.builder()
-        .origin(ORIGIN)
-        .build();
+    return OriginEntity.builder().origin(ORIGIN).build();
   }
 
   public static EventTypeEntity eventTypeEntity() {
-    return EventTypeEntity.builder()
-        .eventType(EVENT_TYPE_CERTIFICATE_SENT)
-        .build();
+    return EventTypeEntity.builder().eventType(EVENT_TYPE_CERTIFICATE_SENT).build();
   }
 
   public static RelationTypeEntityBuilder relationTypeEntityBuilder() {
-    return RelationTypeEntity.builder()
-        .relationType(CERTIFICATE_PARENT_TYPE);
+    return RelationTypeEntity.builder().relationType(CERTIFICATE_PARENT_TYPE);
   }
 
   public static RoleEntity roleEntity() {
-    return RoleEntity.builder()
-        .role(ROLE)
-        .build();
+    return RoleEntity.builder().role(ROLE).build();
   }
 
   public static PartyEntity recipientPartyEntity() {
-    return PartyEntity.builder()
-        .party(RECIPIENT)
-        .build();
+    return PartyEntity.builder().party(RECIPIENT).build();
   }
 
   public static PartyEntity messageSenderPartyEntity() {
-    return PartyEntity.builder()
-        .party(MESSAGE_SENDER)
-        .build();
+    return PartyEntity.builder().party(MESSAGE_SENDER).build();
   }
 
   public static PartyEntity messageRecipientPartyEntity() {
-    return PartyEntity.builder()
-        .party(MESSAGE_RECIPIENT)
-        .build();
+    return PartyEntity.builder().party(MESSAGE_RECIPIENT).build();
   }
 
   public static MessageEntity.MessageEntityBuilder messageEntity() {

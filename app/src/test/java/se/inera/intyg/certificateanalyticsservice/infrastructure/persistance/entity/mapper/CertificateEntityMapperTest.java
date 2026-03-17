@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,22 +37,21 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 @ExtendWith(MockitoExtension.class)
 class CertificateEntityMapperTest {
 
-  @Mock
-  private CertificateEntityRepository certificateEntityRepository;
-  @InjectMocks
-  private CertificateEntityMapper certificateEntityMapper;
+  @Mock private CertificateEntityRepository certificateEntityRepository;
+  @InjectMocks private CertificateEntityMapper certificateEntityMapper;
 
   @Test
   void shouldMapCertificateCorrectlyWhenCreatingNewEntity() {
     final var message = draftPseudonymizedMessageBuilder().build();
-    final var newEntity = CertificateEntity.builder()
-        .certificateId(message.getCertificateId())
-        .certificateType(CERTIFICATE_TYPE)
-        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .build();
+    final var newEntity =
+        CertificateEntity.builder()
+            .certificateId(message.getCertificateId())
+            .certificateType(CERTIFICATE_TYPE)
+            .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
+            .build();
 
     when(certificateEntityRepository.save(newEntity)).thenReturn(newEntity);
-    
+
     final var result = certificateEntityMapper.map(message);
 
     assertEquals(newEntity, result);
@@ -45,8 +62,8 @@ class CertificateEntityMapperTest {
     final var message = draftPseudonymizedMessageBuilder().build();
     final var existingEntity = mock(CertificateEntity.class);
 
-    when(certificateEntityRepository.findByCertificateId(message.getCertificateId())).thenReturn(
-        Optional.of(existingEntity));
+    when(certificateEntityRepository.findByCertificateId(message.getCertificateId()))
+        .thenReturn(Optional.of(existingEntity));
 
     final var result = certificateEntityMapper.map(message);
     assertEquals(existingEntity, result);

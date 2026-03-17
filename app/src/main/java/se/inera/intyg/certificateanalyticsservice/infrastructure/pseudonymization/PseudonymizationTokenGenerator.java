@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2026 Inera AB (http://www.inera.se)
+ *
+ * This file is part of sklintyg (https://github.com/sklintyg).
+ *
+ * sklintyg is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * sklintyg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization;
 
 import java.nio.charset.StandardCharsets;
@@ -33,94 +51,59 @@ public class PseudonymizationTokenGenerator {
   private static final int TOKEN_LENGTH = 16;
 
   public String id(String id) {
-    return id == null ? null : token(
-        FIELD_ID,
-        normalize(id)
-    );
+    return id == null ? null : token(FIELD_ID, normalize(id));
   }
 
   public String eventUnitId(String eventUnitId) {
-    return eventUnitId == null ? null : token(
-        FIELD_UNIT_ID,
-        normalize(eventUnitId)
-    );
+    return eventUnitId == null ? null : token(FIELD_UNIT_ID, normalize(eventUnitId));
   }
 
   public String eventCareProviderId(String eventCareProviderId) {
-    return eventCareProviderId == null ? null : token(
-        FIELD_CARE_PROVIDER_ID,
-        normalize(eventCareProviderId)
-    );
+    return eventCareProviderId == null
+        ? null
+        : token(FIELD_CARE_PROVIDER_ID, normalize(eventCareProviderId));
   }
 
   public String staffId(String staffId) {
-    return staffId == null ? null : token(
-        FIELD_STAFF_ID,
-        normalize(staffId)
-    );
+    return staffId == null ? null : token(FIELD_STAFF_ID, normalize(staffId));
   }
 
   public String sessionId(String sessionId) {
-    return sessionId == null ? null : token(
-        FIELD_SESSION_ID,
-        normalize(sessionId)
-    );
+    return sessionId == null ? null : token(FIELD_SESSION_ID, normalize(sessionId));
   }
 
   public String certificateId(String certificateId) {
-    return certificateId == null ? null : token(
-        FIELD_CERTIFICATE_ID,
-        normalize(certificateId)
-    );
+    return certificateId == null ? null : token(FIELD_CERTIFICATE_ID, normalize(certificateId));
   }
 
   public String certificateUnitId(String certificateUnitId) {
-    return certificateUnitId == null ? null : token(
-        FIELD_UNIT_ID,
-        normalize(certificateUnitId)
-    );
+    return certificateUnitId == null ? null : token(FIELD_UNIT_ID, normalize(certificateUnitId));
   }
 
   public String certificateCareProviderId(String certificateCareProviderId) {
-    return certificateCareProviderId == null ? null : token(
-        FIELD_CARE_PROVIDER_ID,
-        normalize(certificateCareProviderId)
-    );
+    return certificateCareProviderId == null
+        ? null
+        : token(FIELD_CARE_PROVIDER_ID, normalize(certificateCareProviderId));
   }
 
   public String parentCertificateId(String certificateId) {
-    return certificateId == null ? null : token(
-        FIELD_CERTIFICATE_ID,
-        normalize(certificateId)
-    );
+    return certificateId == null ? null : token(FIELD_CERTIFICATE_ID, normalize(certificateId));
   }
 
   public String patientId(String patientId) {
-    return patientId == null ? null : token(
-        FIELD_PATIENT_ID,
-        normalize(patientId)
-    );
+    return patientId == null ? null : token(FIELD_PATIENT_ID, normalize(patientId));
   }
 
   public String messageId(String messageId) {
-    return messageId == null ? null : token(
-        FIELD_MESSAGE_ID,
-        normalize(messageId)
-    );
+    return messageId == null ? null : token(FIELD_MESSAGE_ID, normalize(messageId));
   }
 
   public String messageAnswerId(String messageAnswerId) {
-    return messageAnswerId == null ? null : token(
-        FIELD_MESSAGE_ID,
-        normalize(messageAnswerId)
-    );
+    return messageAnswerId == null ? null : token(FIELD_MESSAGE_ID, normalize(messageAnswerId));
   }
 
   public String messageReminderId(String messageReminderId) {
-    return messageReminderId == null ? null : token(
-        FIELD_MESSAGE_ID,
-        normalize(messageReminderId)
-    );
+    return messageReminderId == null ? null : token(FIELD_MESSAGE_ID, normalize(messageReminderId));
   }
 
   private String normalize(String value) {
