@@ -21,7 +21,12 @@ allprojects {
 
     repositories {
         mavenLocal()
-        maven { url "https://nexus.drift.inera.se/repository/it-public/" }
+        maven {
+            url = "https://nexus.drift.inera.se/repository/it-public/"
+            content {
+                includeGroupByRegex "se\\.inera.*"
+            }
+        }
         mavenCentral()
     }
 }
@@ -42,9 +47,9 @@ subprojects {
             target 'src/*/java/**/*.java'
 
             licenseHeaderFile(rootProject.file('spotless.license.txt'), 'package ')
+            googleJavaFormat(googleJavaFormatVersion)
             removeUnusedImports()
             forbidWildcardImports()
-            googleJavaFormat(googleJavaFormatVersion)
             formatAnnotations()
         }
     }
