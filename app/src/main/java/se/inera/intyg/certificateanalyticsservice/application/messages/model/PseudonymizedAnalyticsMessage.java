@@ -23,9 +23,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 @Value
 @Builder
+@JsonDeserialize(builder = PseudonymizedAnalyticsMessage.PseudonymizedAnalyticsMessageBuilder.class)
 public class PseudonymizedAnalyticsMessage {
 
   String id;
@@ -59,4 +62,7 @@ public class PseudonymizedAnalyticsMessage {
   List<String> messageQuestionIds;
   String messageSenderId;
   String messageRecipientId;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class PseudonymizedAnalyticsMessageBuilder {}
 }

@@ -18,12 +18,10 @@
  */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.UncheckedIOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.AnalyticsMessageParser;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
@@ -39,10 +37,6 @@ public class CertificateAnalyticsEventV1Parser implements AnalyticsMessageParser
   }
 
   public CertificateAnalyticsMessageV1 parse(String message) {
-    try {
-      return objectMapper.readValue(message, CertificateAnalyticsMessageV1.class);
-    } catch (JsonProcessingException e) {
-      throw new UncheckedIOException(e);
-    }
+    return objectMapper.readValue(message, CertificateAnalyticsMessageV1.class);
   }
 }
