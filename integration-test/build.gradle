@@ -10,8 +10,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-restclient'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.testcontainers:mysql'
-    testImplementation 'org.testcontainers:activemq'
+    testImplementation 'org.testcontainers:testcontainers-activemq'
+    testImplementation 'org.testcontainers:testcontainers-mysql'
 
     testImplementation testFixtures(project(":app"))
 }
