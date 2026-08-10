@@ -18,9 +18,7 @@
  */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model;
 
-import java.io.Serializable;
-
-public interface CertificateAnalyticsMessage extends Serializable {
+public interface CertificateAnalyticsMessage {
 
   String getMessageId();
 

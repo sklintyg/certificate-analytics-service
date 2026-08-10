@@ -18,7 +18,6 @@
  */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
-import java.io.Serializable;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventRecipientV1.CertificateAnalyticsEventRecipientV1Builder;
@@ -28,7 +27,7 @@ import tools.jackson.databind.annotation.JsonPOJOBuilder;
 @Value
 @Builder
 @JsonDeserialize(builder = CertificateAnalyticsEventRecipientV1Builder.class)
-public class CertificateAnalyticsEventRecipientV1 implements Serializable {
+public class CertificateAnalyticsEventRecipientV1 {
 
   String id;
 

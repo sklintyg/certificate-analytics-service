@@ -18,7 +18,6 @@
  */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +30,7 @@ import tools.jackson.databind.annotation.JsonPOJOBuilder;
 @Value
 @Builder
 @JsonDeserialize(builder = CertificateAnalyticsEventMessageV1Builder.class)
-public class CertificateAnalyticsEventMessageV1 implements Serializable {
+public class CertificateAnalyticsEventMessageV1 {
 
   String id;
   String answerId;

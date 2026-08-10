@@ -18,7 +18,6 @@
  */
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
@@ -29,7 +28,7 @@ import tools.jackson.databind.annotation.JsonPOJOBuilder;
 @Value
 @Builder
 @JsonDeserialize(builder = CertificateAnalyticsEventV1Builder.class)
-public class CertificateAnalyticsEventV1 implements Serializable {
+public class CertificateAnalyticsEventV1 {
 
   LocalDateTime timestamp;
   String messageType;
